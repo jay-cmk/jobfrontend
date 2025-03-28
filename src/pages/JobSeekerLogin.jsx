@@ -5,10 +5,12 @@ import { useNavigate } from "react-router-dom";
 const JobSeekerLogin = () => {
     const navigate = useNavigate();
     const [isSignup, setIsSignup] = useState(false);
-    const [role, setRole] = useState("seeker"); // "seeker" or "provider"
+    const [role, setRole] = useState("seeker"); 
     const [formData, setFormData] = useState({ name: "", email: "", password: "" });
-    const [message, setMessage] = useState(""); // To show success/error messages
-    const [loading, setLoading] = useState(false); // ✅ Loading state
+    const [message, setMessage] = useState(""); 
+    const [loading, setLoading] = useState(false); 
+
+    const backendUrl = import.meta.env.VITE_BACKEND_LINKKS || "http://localhost:3000";
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -17,21 +19,19 @@ const JobSeekerLogin = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage("");
-        setLoading(true); // ✅ Start loading
+        setLoading(true); 
 
-        const baseUrl = role === "seeker"
-            ? `${import.meta.env.VITE_BACKEND_LINKKS}/api/auth/${isSignup ? "signup" : "login"}`
-            : `http://localhost:3000/api/authprovider/${isSignup ? "signup" : "login"}`;
+        const apiUrl = `${backendUrl}/api/auth${role === "provider" ? "provider" : ""}/${isSignup ? "signup" : "login"}`;
 
         try {
-            const { data } = await axios.post(baseUrl, formData);
+            const { data } = await axios.post(apiUrl, formData);
             setMessage(data.message);
-            localStorage.setItem("token", data.token); // Save JWT token
+            localStorage.setItem("token", data.token); 
 
-            // Redirect to respective dashboard
             navigate(role === "seeker" ? "/seeker-profile" : "/recruiter-profile");
         } catch (error) {
             setMessage(error.response?.data?.message || "Something went wrong");
+            console.error("Login/Signup Error:", error);
         } finally {
             setLoading(false); // ✅ Stop loading
         }
@@ -62,7 +62,7 @@ const JobSeekerLogin = () => {
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-80">
                 {/* Show Name Input ONLY for Signup */}
-                {isSignup && role === "seeker" && (
+                {isSignup && (
                     <input
                         type="text"
                         name="name"
@@ -70,6 +70,7 @@ const JobSeekerLogin = () => {
                         className="border p-2"
                         value={formData.name}
                         onChange={handleChange}
+                        required
                     />
                 )}
 
