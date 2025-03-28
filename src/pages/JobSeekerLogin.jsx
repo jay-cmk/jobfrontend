@@ -20,7 +20,7 @@ const JobSeekerLogin = () => {
         setLoading(true); // ✅ Start loading
 
         const baseUrl = role === "seeker"
-            ? `${import.meta.env.VITE_BACKEND_URL}/api/auth/${isSignup ? "signup" : "login"}`
+            ? `${import.meta.env.VITE_BACKEND_URL}api/auth/${isSignup ? "signup" : "login"}`
             : `http://localhost:3000/api/authprovider/${isSignup ? "signup" : "login"}`;
 
         try {
