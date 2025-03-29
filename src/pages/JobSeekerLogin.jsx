@@ -10,7 +10,7 @@ const JobSeekerLogin = () => {
     const [message, setMessage] = useState(""); 
     const [loading, setLoading] = useState(false); 
 
-    const backendUrl = import.meta.env.VITE_BACKEND_LINKKS || "http://localhost:3000";
+    const backendUrl = import.meta.env.VITE_BACKEND_LINKKAS || "http://localhost:3000";
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
